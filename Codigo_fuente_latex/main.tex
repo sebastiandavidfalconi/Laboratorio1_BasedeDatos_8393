@@ -1,0 +1,289 @@
+\documentclass[10pt, oneside,spanish]{article}   	% use "amsart" instead of "article" for AMSLaTeX format
+\usepackage{geometry}                		% See geometry.pdf to learn the layout options. There are lots.
+\geometry{a4paper}                   		% ... or a4paper or a5paper or ... 
+\usepackage[spanish, es-noindentfirst]{babel}
+\selectlanguage{spanish}
+\usepackage[utf8]{inputenc}
+%\geometry{landscape}                		% Activate for rotated page geometry
+%\usepackage[parfill]{parskip}    		% Activate to begin paragraphs with an empty line rather than an indent
+\usepackage{graphicx}				% Use pdf, png, jpg, or eps§ with pdflatex; use eps in DVI mode
+								% TeX will automatically convert eps --> pdf in pdflatex		
+\usepackage{amssymb}
+\usepackage{authblk}
+\usepackage[section]{placeins}
+
+%SetFonts
+
+%SetFonts
+
+\title{Reporte de Laboratorio Nro. 1}
+\author[L00368514]{Sebastian Falconi}
+\affil[ ]{Universidad de las Fuerzas Armadas}
+\affil[ ]{sdfalconi@espe.edu.ec}
+\affil[ ]{}
+\affil[ ]{Creación de datos sintéticos}
+\renewcommand\Authands{, }
+\date{}							% Activate to display a given date or no date
+%Definir las líneas de codigo comentadas.
+\usepackage{listings}
+\usepackage{xcolor}
+
+%New colors defined below
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+\definecolor{blue(ncs)}{rgb}{0.0, 0.53, 0.74}
+%Code listing style named "mystyle"
+\lstdefinestyle{estilo}{
+  backgroundcolor=\color{backcolour}, commentstyle=\color{codegreen},
+  keywordstyle=\color{blue(ncs)},
+  numberstyle=\tiny\color{codegray},
+  stringstyle=\color{codepurple},
+  basicstyle=\ttfamily\footnotesize,
+  breakatwhitespace=false,         
+  breaklines=true,                 
+  captionpos=b,                    
+  keepspaces=true,                 
+  numbers=left,                    
+  numbersep=5pt,                  
+  showspaces=false,                
+  showstringspaces=false,
+  showtabs=false,                  
+  tabsize=2
+}
+
+%"mystyle" code listing set
+\lstset{style=estilo}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Las bases de datos aparecen por la necesidad humana de guardar la información de forma estructurada \cite{beynon-davies_sistemas_2018}, y de la misma forma los datos sintéticos permiten a las personas cumplir con la necesidad de cargar datos creados de forma sintética, ya sea para comprobar el correcto funcionamiento de una base de datos, o para entrenar modelos de Inteligencia Artificial por lo que es de suma importancia aprender a generar y utilizar los datos sintéticos \cite{rivera_base_2008}. En el presente reporte de laboratorio se generarán datos sintéticos a partir de un conjunto de cuatro entidades, que servirán para poblar una base de datos relacional en base a un sistema de postulación de cupos universitarios en el Ecuador, para realizar esto se utilizará el lenguaje de programación Python, debido a su sencillez y facilidad de generar datos optimizando el tiempo en comparación con otros lenguajes de programación de bajo nivel.
+\end{abstract}
+
+\section{Introducción}
+Los datos son la pieza fundamental de una base de datos relacional\cite{ricardo_bases_2009}, sin estos la necesidad de crear y administrar una base de datos no cobraría sentido, por lo tanto, es importante realizar la generación u obtención de datos, así como su limpieza y organización de los mismos.  En el presente laboratorio se generarán 5000 datos sintéticos por cada una de las siguientes entidades que siguen el modelo entidad-relación: aspirantes, institutos, carreras, y cupo. Para la generación de datos sintéticos se utilizará el lenguaje de programación de alto nivel Python, debido a su alta popularidad, su sencilla sintaxis, y su vasta cantidad de librerías y módulos que permiten crear datos sintéticos de forma sencilla para el programador \cite{fernandez_python_2013}, sin la necesidad de programar todo desde cero. Python es un lenguaje de programación ampliamente utilizado debido a su eficiencia y a su baja curva de aprendizaje requerida para hacer programas, además de que se puede ejecutar en múltiples plataformas. Entre los beneficios que se puede encontrar a la hora de utilizar este lenguaje de programación tenemos que, permite a los desarrolladores ser más productivos, se puede utilizar este lenguaje de programación con Java, C, C++, entre otros \cite{chazallet_python_2016}. Existe una gran comunidad activa en Internet que permite a los desarrolladores de software, encontrar la solución a un problema sencillo o complejo, únicamente utilizando su motor de búsqueda preferido, como Google, Bing, o DuckDuckGo \cite{fernandez_python_2013}.
+
+Tal como se mencionó anteriormente, las entidades de las cuales se generarán datos sintéticos son: aspirantes, institutos, carreras, y cupo, y serán utilizadas posteriormente, en una base de datos relacional. Debido a la necesidad de generar 5000 datos por cada entidad, se puede percibir una elevada dificultad a la hora de generar estos datos de forma manual uno por uno hasta finalizar, por esta razón se decidió utilizar la creación de datos sintéticos, para ello se utilizará la librería Faker de Python, la cual permite generar datos datos generados automáticamente con pocas líneas de código, de tal forma que se puede utilizar para el proyecto que se realizará utilizando estos datos. Se debe considerar la base legal determinada por la Senescyt (Secretaría de Educación Superior, Ciencia, Tecnología e Innovación), entidad que regula la asignación de cupos a instituciones de educación superior en el Ecuador. Los scripts generados en el presente laboratorio se pueden encontrar en el enlace digital del repositorio de GitHub \cite{github}.
+
+\section {Método}
+Las entidades a analizar en el presente laboratorio, fueron determinadas de forma conjunta con el compañero de proyecto que se realizará utilizando base de datos relacionales. Se realizó la repartición de entidades, de tal forma que cada integrante de grupo pudiera analizar cuatro entidades diferentes. La primera entidad a analizar es ``aspirantes``, la cual tiene como por objetivo almacenar los datos de los aspirantes a un cupo a una educación superior, se determinó que los atributos para esta entidad son: id\texttt{\char`_aspirante}, la cual es generada mediante la librería UUID, la cual permite generar IDs únicos a partir del tiempo actual de la computadora.
+El siguiente atributo de la primera entidad es: \texttt{nombres\char`_aspirante}. Se creó una variable que almacena el valor de 5000, en referencia a la necesidad de generar esta cantidad de datos, y utilizando el módulo uuid1 de la librería uuid. Mediante un ciclo repetitivo for, se pudo crear todos los IDs requeridos, tal como se puede evidenciar en el siguiente código.
+\begin{lstlisting}[language=Python, caption=Python example,numbers=none,xleftmargin=.15in,xrightmargin=.15in]  
+numeroDatosSinteticos = 5000
+df.id_cupo = [uuid.uuid1() for i in range(numeroDatosSinteticos)]
+\end{lstlisting}
+
+Los siguientes atributos son: \texttt{nombres\char`_aspirante, genero, y email}. Se creó una variable que permite almacenar el género del aspirante, y utilizando el módulo choice perteneciente a NumPy, se pudo generar aleatoriamente el género, que puede ser "M", o "F". Al valor resultante se lo transformó a dato de tipo String. 
+\begin{lstlisting}[language=Python, caption=Python example,numbers=none,xleftmargin=.15in,xrightmargin=.15in]  
+sexo = ""
+for i in range(numeroDatosSinteticos):
+  sexo = np.random.choice(["M", "F"], p=[0.5, 0.5])
+ 
+\end{lstlisting}
+Si el género del estudiante corresponde a M para hombre, se generará los nombres correspondientes a dicho género. Para poder realizar esto se utilizó la función \texttt{first\char`_name\char`_male} que pertenece a la librería Faker. De la misma forma, utilizando la función \texttt{last\char`_name\char`_male} se pudo crear los apellidos. 
+\begin{lstlisting}[language=Python, caption=Python example,numbers=none,xleftmargin=.15in,xrightmargin=.15in]  
+  if sexo == "M":
+    primer_nombre = fake.first_name_male()
+    segundo_nombre = fake.first_name_male()
+    primer_apellido = fake.last_name_male()
+    segundo_apellido = fake.last_name_male()
+\end{lstlisting}
+Caso contrario, si el género del aspirante corresponde a F para mujer, se generará los nombres que corresponden a su género. Para ello se utilizó la función \texttt{first\char`_name\char`_female}. De la misma forma, utilizando la función \texttt{last\char`_name\char`_female} se pudo crear los apellidos. 
+\begin{lstlisting}[language=Python, caption=Python example,numbers=none,xleftmargin=.15in,xrightmargin=.15in]  
+  elif sexo == "F":
+    primer_nombre = fake.first_name_female()
+    segundo_nombre = fake.first_name_female()
+    primer_apellido = fake.last_name_female()
+    segundo_apellido = fake.last_name_female()
+\end{lstlisting}
+Para generar el correo se utilizó el primer nombre, y el primer apellido generados anteriormente, para poder concatenarlo junto al dominio de correo electrónico \texttt{@hotmail.com}. Se concatenó el primer nombre y segundo nombre. Así como se concatenaron los apellidos en dos variables distintas, y se almacenó en el DataFrame, junto con el correo electrónico convertido a minúsculas. 
+\begin{lstlisting}[language=Python, caption=Python example,numbers=none,xleftmargin=.15in,xrightmargin=.15in]  
+ email = f"{primer_nombre}.{primer_apellido}@hotmail.com"
+  df.nombres_aspirante[i] = primer_nombre + ' ' + segundo_nombre
+  df.apellidos_aspirante[i] = primer_apellido + ' ' + segundo_apellido
+  df.correo_aspirante[i] = email.lower()
+ \end{lstlisting}
+ La siguiente columna dentro del DataFrame contiene el número de teléfono, generado a partir de la función randint que permite generar dígitos o números aleatorios de tipo entero. En primer lugar, se utilizó un ciclo for para generar todos los 5000 valores, por cada valor se almacenó el dato fijo `09` en referencia a los números de celular que se utilizan en el Ecuador. Posteriormente los siguientes digítos fueron generados de forma aleatoria utilizando randint seleccionando dígitos entre 0 y 9 y convirtiéndolos en String y se almacenan los valores en el DataFrame.
+ 
+ \begin{lstlisting}[language=Python, caption=Python example,numbers=none,xleftmargin=.15in,xrightmargin=.15in]  
+for i in range(numeroDatosSinteticos):
+  telefono = '09'
+  for _ in range(2, 10):
+    telefono = telefono + str(random.randint(0, 9))
+  df.telefono_aspirante[i]=telefono
+ \end{lstlisting}
+ 
+ El séptimo atributo de la entidad aspirantes es la fecha de nacimiento. Para generar fechas aleatorias es importante utilizar la librería \texttt{datetime} que permite crear y almacenar este tipo de datos en variables. Además se utilizó la función \texttt{fake.date\char`_between} que permite generar una fecha de tipo datetime de forma sintética entre un rango de fechas. Se almacenó el valor de la fecha de nacimiento en el DataFrame.
+ 
+  \begin{lstlisting}[language=Python, caption=Python example,numbers=none,xleftmargin=.15in,xrightmargin=.15in]  
+for i in range(numeroDatosSinteticos):
+  fecha_nacimiento = fake.date_between(datetime.date(1980, 1, 1), datetime.date(2007, 1, 1))
+  df.fecha_nacimiento[i]=fecha_nacimiento
+ \end{lstlisting}
+ Finalmente, el último atributo de la entidad aspirantes es el estado del aspirante, que puede ser activo o inactivo. Se creó una lista con estos dos valores, y se almacenó en una variable. Luego, el módulo choice que pertenece a la librería random, permite seleccionar un valor de forma aleatoria dentro de un conjunto de opciones, en este caso de la lista ingresada, y almacenarlo en una variable. Se guardaron los valores dentro del DataFrame para su posterior visualización.
+ 
+   \begin{lstlisting}[language=Python, caption=Python example,numbers=none,xleftmargin=.15in,xrightmargin=.15in]  
+estadoOpciones = ["Activo", "Inactivo"]
+for i in range(numeroDatosSinteticos):
+  estado = random.choice(estadoOpciones)
+  df.estado_aspirante[i]=estado
+  \end{lstlisting}
+  
+ Para poder visualizar los valores en forma de tabla, se creó un archivo de tipo CSV (Valores Separados por Coma). Para poder realizar esto se utilizó la función \texttt{to\char`_csv} que permite realizar esto. El formato CSV permite representar datos de una tabla, utilizando comas que indican al procesador de texto las columnas. Una vez almacenados los valores dentro del archivo CSV se puede visualizar los siguientes resultados para uno de los 5000 estudiantes, tal como se puede evideenciar en el cuadro 1.
+ 
+ La segunda entidad a analizar es instituciones, se definió 7 atributos: IdInsti, NomInstituto, CorreoInstituto, TelefonoInstituto, DescripcionInstituto, EstadoInstituto, URL. Para el primer atributo, se utilizó el código ya mencionado anteriormente que se utilizó en aspirantes, para crear el Nombre del Instituto, el correo electrónico, y el URL del sitio web del mismo. Primero se definió dos variables, y mediante un bucle for se recorrió a través de los 5000 datos que se requerían generar. Utilizando la librería Faker se definió un primero nombre y un apellido que serviría para generar el nombre del instituto, se concatenó la palabra instituto junto con el nombre y el apellido formando así el nombre del instituto.
+ 
+    \begin{lstlisting}[language=Python, caption=Python example,numbers=none,xleftmargin=.15in,xrightmargin=.15in]  
+nombre = ''
+apellido = ''
+for i in range(5000):
+  nombre = fake.first_name()
+  apellido = fake.last_name()
+  df.NomInstituto[i] = 'Instituto ' + nombre + ' ' + apellido
+  \end{lstlisting}
+ A partir del nombre y apellido generados mediante la librería Faker, se definió el correo electrónico que utilizó estas dos variables junto con el dominio de correo "@hotmail.com". El nuevo correo electrónico contiene las iniciales del nombre y del apellido en mayúsculas, por lo que es requerido transformarlo a minúsculas usando la función lower. Finalmente, se almacenó en el DataFrame el valor del email. De la misma forma, se creó el url del sitio web mediante el string "universidad" y concatenándolo con el nombre y apellido, así como con ".com". El url se transformó a minúsculas y se almacenó en una variable.
+  
+    \begin{lstlisting}[language=Python, caption=Python example,numbers=none,xleftmargin=.15in,xrightmargin=.15in]  
+  email = f"{nombre}.{apellido}@hotmail.com"
+  email = email.lower()
+  df.CorreoInstituto[i] = email
+  url = "universidad" + nombre + apellido + ".com"
+  url = url.lower()
+  df.URL[i] = url
+  \end{lstlisting}
+  
+ Para generar el número de teléfono, y el estado se utilizó el mismo método que en la primera entidad, en cambio para generar una descripción del instituto fue requerido utilizar la función paragraph de la librería Faker. Esta función recibe como parámetro el número de oraciones por cada párrafo que se generará. Una vez generada la descripción del instituto se almacenó en el DataFrame. 
+ 
+   \begin{lstlisting}[language=Python, caption=Python example,numbers=none,xleftmargin=.15in,xrightmargin=.15in]  
+for i in range(numeroDatosSinteticos):
+  descripcion = fake.paragraph(nb_sentences=3)
+  df.DescripcionInstituto[i]=descripcion
+  \end{lstlisting}
+ La tercera entidad cubre los siguientes atributos: \texttt{id\texttt{\char`_}cupo, fecha\texttt{\char`_}aceptacion\texttt{\char`_}cupo.
+  Así como, hora\texttt{\char`_}aceptacion\texttt{\char`_}cupo}, 
+ \texttt{descripcion\texttt{\char`_}cupo,tipo\texttt{\char`_}cupo, estado\texttt{\char`_}cupo}. En el caso del id, la fecha de aceptacion de cupo, la descripción, y el estado se lo puede generar de forma similar al método empleado en las entidades anteriores. Para generar la hora de aceptación del cupo se utilizó la función \texttt{time()} que pertenece a la librería Faker. Utilizando un ciclo repetitivo for se generó 5000 valores que utilizan time() para generar datos y se almacenó en el DataFrame.
+    \begin{lstlisting}[language=Python, caption=Python example,numbers=none,xleftmargin=.15in,xrightmargin=.15in]  
+for i in range(numeroDatosSinteticos):
+  hora_cupo = fake.time()
+  df.hora_aceptacion_cupo[i]=hora_cupo
+  \end{lstlisting}
+ 
+ En el caso del tipo de cupo, se definió dos tipos, nivelación y primer nivel. En el Ecuador, los estudiantes que desean ingresar a un cupo universitario pueden ingresar a una carrera que ofrece un cupo a una institución de educación superior si es que el estudiante logra aprobar el curso de nivelación, caso contrario, tendrá la oportunidad de intentar nuevamente aprobar el curso por una segunda vez. Si pierde dos veces el curso de nivelación, el estudiante perderá el cupo y deberá volver a realizar el proceso de admisión de la Senescyt. El segundo tipo de cupo es el que los estudiantes pueden ingresar directamente a primer nivel sin la necesidad de cursar un curso de nivelación, generalmente este tipo es utilizado para las universidades privadas del Ecuador. Se creó una variable que contiene los dos valores de tipo de cupo, y utilizando la función choice que permite elegir de forma aleatoria un valor de una lista, se generó el tipo de cupo generado de forma sintética, para generar los 5000 datos nuevamente se utilizó un ciclo repetitivo for.
+     \begin{lstlisting}[language=Python, caption=Python example,numbers=none,xleftmargin=.15in,xrightmargin=.15in]  
+tipo_cupoOpciones = ["NIVELACION", "PRIMER NIVEL"]
+for i in range(numeroDatosSinteticos):
+  tipo_cupo = random.choice(tipo_cupoOpciones)
+  df.tipo_cupo[i]=tipo_cupo
+  \end{lstlisting}
+  
+ La última entidad a analizar es la de carrera, dado que un aspirante a la educación superior en el Ecuador puede seleccionar qué carrera desea elegir, es requerido crear una entidad que permita guardar las distintas opciones de carrera que existen. Los atributos utilizados en esta entidad son: \texttt{id\texttt{\char`_}carrera, nombre\texttt{\char`_}carrera, descripcion\texttt{\char`_}carrera.} 
+ Así como, estado\texttt{\char`_}carrera, fecha\texttt{\char`_}inicio\texttt{\char`_}vigencia\texttt{\char`_}carrera, modalidad y jornada. el id, la descripción, y la fecha de inicio sigue un patrón similar al método usado anteriormente en otras entidades. Para generar el nombre de carrera se utilizó la función job perteneciente a la librería Faker, la cual permite generar una profesión de carrera. Se concatenó el resultado de la función job con el título de la carrera, la cual puede tener tres valores, el primero de Ingeniería, el segundo de licenciatura, y al final Tecnología. Una vez concatenado el nombre de la carrera es requerido almacenar este valor en el DataFrame.
+ 
+      \begin{lstlisting}[language=Python, caption=Python example,numbers=none,xleftmargin=.15in,xrightmargin=.15in]  
+for i in range(numeroDatosSinteticos):
+  nombrecarrera = np.random.choice([``Ingenieria``, ``Licenciatura``, ``Tecnologia``], p=[1/3, 1/3,1/3])
+  carrera = nombre_carrera + `` en `` + fake.job()
+  df.nombre_carrera[i] = carrera
+  \end{lstlisting}
+ 
+ Para la modalidad, se definió los tipos de modalidades presencial, distancia, y en línea. En cambio, en la jornada se utilizó los valores de intensiva, matutina, vespertina, y en línea. Utilizando la función choice utilizada previamente se seleccionó los valores de la jornada de forma aleatoria, y de la misma forma de la modalidad y se almacenó respectivamente en cada una de las columnas del DataFrame.
+     
+       \begin{lstlisting}[language=Python, caption=Python example,numbers=none,xleftmargin=.15in,xrightmargin=.15in]  
+jornadaOpciones = ["Intensiva", "Matutina", "Vespertina", "En linea"]
+for i in range(numeroDatosSinteticos):
+  jornada = random.choice(jornadaOpciones)
+  df.jornada[i]=jornada
+for i in range(numeroDatosSinteticos):
+  fecha_inicio_vigencia_carrera = fake.date_between(datetime.date(1940, 1, 1), datetime.date(1980, 1, 1))
+  df.fecha_inicio_vigencia_carrera[i]=fecha_inicio_vigencia_carrera
+  \end{lstlisting}
+
+
+\section{Results and Analysis}
+La tabla obtenida al generar los datos sintéticos de los aspirantes a la educación superior se puede visualizar en el Cuadro 1, en la cual se podrá visualizar los datos de un aspirante de los 5000 generados. Se generaron datos de 8 atributos, considerando las necesidades y requisitos previos de las entidades a analizar. Dado que los aspirantes requieren representar a los futuros estudiantes de la vida real, se utilizaron nombres en español, el cual es el lenguaje que se utiliza en el Ecuador. Para generar los correos se utilizó los nombres y apellidos generados previamente, de forma que coincida con el género seleccionado al azar. El número de teléfono del aspirante se definió que debe comenzar siempre por 09, y la fecha de nacimiento puede variar desde enero 01 de 1980 hasta enero 01 de 2007, por lo que un estudiante podría tener alrededor de 16 años o más para poder postular a una universidad, dado que existen estudiantes que cumplen con aquella edad.
+
+\begin{table}[!htbp]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+ id\texttt{\char`_}aspirante & 159f1e14-692f-11ed-b3d8-0242ac1c0002  \\ \hline
+ nombres\texttt{\char`_}aspirante & Juan Francisco \\ \hline
+ apellidos\texttt{\char`_}aspirante & Esteban Plaza	 \\ \hline
+ correo\texttt{\char`_}aspirante & juan.esteban@hotmail.com \\ \hline
+ genero & M \\ \hline
+ telefono\texttt{\char`_}aspirante & 0941768713	 \\ \hline
+ fecha\texttt{\char`_}nacimiento & 1980-11-20 \\ \hline
+ estado\texttt{\char`_}aspirante & Activo \\ \hline
+\end{tabular}
+\caption{Tabla con datos generados sintéticamente de uno de los 5000 aspirantes}
+\label{table:kysymys}
+\end{table}
+
+En el cuadro 2 se podrá visualizar los datos de uno de los institutos de los 5000 generados. Se generaron datos de 7 atributos, y se consideró el idioma español para crear el nombre del instituto. Para generar los correos se utilizó un nombre y un apellido y el dominio hotmail.com. El número de teléfono del instituto se generó de tal forma que debe comenzar siempre por 09, y descripción utiliza los párrafos generados en base al Lorem Ipsum. El estado puede tener dos modos, ya sea activo o inactivo, y finalmente el URL fue creado a partir de el mismo nombre y apellido iniciando con la palabra `universidad` y finalizando en `.com`.
+
+\begin{table}[!htbp]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+ IdInsti & 88aec16a-691c-11ed-b70d-0242ac1c0002	 \\ \hline
+ NomInstituto & Instituto Maria Reed	 \\ \hline
+ CorreoInstituto & maria.reed@hotmail.com	 \\ \hline
+ TelefonoInstituto & 0924279944	 \\ \hline
+ DescripcionInstituto & Modi provident adipisci sit facere.	 \\ \hline
+ EstadoInstituto & Activo \\ \hline
+ URL & universidadmariareed.com \\ \hline
+\end{tabular}
+\caption{Tabla con datos generados sintéticamente de uno de los 5000 institutos}
+\label{table:kysymys}
+\end{table}
+
+Al generar los datos para la carrera se consideró utilizar los tipos de carrera que pueden ser Licenciatura, Ingeniería, y Tecnología, concatenando cada uno de ellos con una profesión proporcionada y generada mediante la librería Faker. Además, fue requerido utilizar tres modalidades de carrera, ya sea En linea, presencial, o a distancia. Para la jornada puede ser, en linea, intensiva, matutina, o vespertina. Y la fecha de vigencia de la carrera puede variar entre 01/01/1940 y 01/01/1980. En el cuadro 3 se puede visualizar una de las carreras que se generó utilizando el código fuente del presente laboratorio.
+
+\begin{table}[!htbp]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+ id\texttt{\char`_}carrera & 82bc9f8c-6923-11ed-bb95-0242ac1c0002	  \\ \hline
+ nombre\texttt{\char`_}carrera & Licenciatura en Optometrista \\ \hline
+ descripcion\texttt{\char`_}carrera & Minima non nostrum quis aperiam.	 \\ \hline
+ estado\texttt{\char`_}carrera & Inactivo	 \\ \hline
+ fecha\texttt{\char`_}inicio\texttt{\char`_}vigencia\texttt{\char`_}carrera & 1949-03-08 \\ \hline
+ modalidad & En linea \\ \hline
+ jornada & En linea \\ \hline
+\end{tabular}
+\caption{Tabla con datos generados sintéticamente de una de las 5000 carreras}
+\label{table:kysymys}
+\end{table}
+
+
+
+Finalmente la última entidad comprende la generación del tipo de cupo, el cual puede permitir al estudiante ir directamente a primer nivel, o a cursar el curso de nivelación según el tipo de carrera ofertada, así como permite almacenar la fecha y hora de aceptación del cupo, y su respectivo estado. La fecha de aceptación del cupo puede variar desde 2021-01-01 hasta 2023-01-01. Cada uno de los scripts generados en el presente laboratorio se pueden encontrar en el repositorio digital de GitHub \cite{github}
+\begin{table}[!htbp]
+\centering
+\begin{tabular}{|l|l|}
+\hline
+ id\texttt{\char`_}cupo & a40b893a-6920-11ed-b632-0242ac1c0002	  \\ \hline
+ fecha\texttt{\char`_}aceptacion\texttt{\char`_}cupo & 2021-10-25 \\ \hline
+ hora\texttt{\char`_}aceptacion\texttt{\char`_}cupo & 13:23:59	 \\ \hline
+ descripcion\texttt{\char`_}cupo & 	Libero commodi in. \\ \hline
+ tipo\texttt{\char`_}cupo & PRIMER NIVEL \\ \hline
+ estado\texttt{\char`_}cupo & Activo	 \\ \hline
+\end{tabular}
+\caption{Tabla con datos generados sintéticamente de uno de los 5000 aspirantes}
+\label{table:kysymys}
+\end{table}
+
+\section{Discusión}
+Se analizó cuatro entidades diferentes, y se generaron datos sintéticos para cada una de ellas, las cuales servirán de ayuda como punto de partida para realizar el proyecto de base de datos relacionales. Se desarrolló, definió, y analizó el código de programación utilizado para poder generar datos sintéticos, utilizando como lenguaje de programación Python, ya que al ser un lenguaje de alto nivel permite a los desarrolladores ahorrar tiempo a la hora de escribir el código. Python cuenta con una extensa y vasta cantidad de librerías y funciones que permiten generar datos sintéticos sin la necesidad de escribir programas extensos. Mediante las librerías Faker, Random, UUID, NumPy, Pandas, y DateTime fue posible realizar la creación de datos sintéticos para las entidades de aspirantes, cupo, institutos, y carreras. 
+
+\section{Conclusión}
+Los datos son una pieza clave a la hora de diseñar bases de datos \cite{manuel_bases_nodate}, y la necesidad de los desarrolladores de generar datos sintéticos, ha llevado a la comunidad activa de Python a crear librerías que permiten una mayor facilidad a la hora de generarlos. Para poder diseñar una base de datos relacional, es de suma importancia analizar los tipos de datos que se desean analizar, y la relación que tendrán a la hora de almacenarlos en forma de tablas, así como pensar en la optimización y rapidez que debe tener la base de datos para funcionar de forma óptima al implementarla en un entorno empresarial. 
+
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{paper}
+
+\end{document}  
